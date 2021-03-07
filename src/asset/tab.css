@@ -1,0 +1,24 @@
+.tab-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.tab-navbar{
+    display: flex;
+    margin: 1rem 0;
+}
+.tab-item{
+    cursor: pointer;
+    color: rgba(255,255,255,0.4);
+    flex-grow: 1;
+    text-align : center;
+    padding-bottom: 0.5rem;
+    border-bottom :   1px  solid gray ;
+    transition: all .1s linear;
+}
+.tab-item-active{
+    border-bottom :   3.5px  solid rgba(117, 31, 31, 0.993) ;
+}
+.tab-body{
+    flex-grow: 1;
+}

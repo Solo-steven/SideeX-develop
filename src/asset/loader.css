@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@500&family=Slabo+27px&display=swap');
+
+.loader-wrap{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    margin: 1rem 0 0 0;
+    padding : 1rem 0 0 0;
+}
+.loader{
+    position : relative;
+    width: 250px;
+    height: 250px;
+}
+
+.loader .loader-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position :absolute;
+    color : #fff;
+    width: 250px;
+    height: 250px;
+    letter-spacing: 2px;
+    font-size : 27px;
+    font-family: 'Bodoni Moda', serif;
+    font-family: 'Slabo 27px', serif;
+}
+
+.loader span{
+    display : inline-block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(calc( (18deg) * var(--i)));
+}
+
+
+@keyframes scaleChange{
+    0%{
+        transform : scale(1);
+    }
+    100%{
+        transform : scale(0);
+    }
+}
+
+.loader span::before{
+    position: absolute;
+    content: '';
+    width: 10px;
+    height: 10px;
+    top: 0;
+    left: 0;
+    background-color: #47f0fc;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 10px #47f0fc,
+        0 0 20px #47f0fc,
+        0 0 40px #47f0fc,
+        0 0 60px #47f0fc;
+    animation-name: scaleChange ;
+    animation-duration : 2s;
+    animation-delay: calc(0.1s*var(--i));
+    animation-iteration-count: infinite;
+}
