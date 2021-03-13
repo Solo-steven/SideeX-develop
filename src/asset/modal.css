@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500&display=swap');
+.modal{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.modal-dialog{
+    width: 100vw;
+    height: 100vh;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    background-color : #00000096;
+}
+.modal-card{
+    width : 80%;
+    max-width: 1000px;
+    padding : 2rem;
+    border-radius : 15px;
+    border:  1px solid gray;
+    background-color : #c7c6c6fd;
+    display: flex;
+    flex-direction : column;
+}
+
+.modal-header{
+    padding-bottom: .6rem;
+    border-bottom : 1px solid gray;
+    margin-bottom : .3rem;
+    font-family: 'Shippori Mincho B1', serif;
+}
+.modal-title{
+    text-align : center;
+    font-size : 3rem;
+}
+.modal-body{
+    flex-grow: 1;
+    display: flex;
+    flex-direction : column;
+    align-items : center;
+    max-height: 90vh;
+    overflow-y: scroll;
+}
+
+.inputBox{
+    width : 100%;
+    margin-top: .6rem;
+}
+
+.inputBox label{
+    display: block;
+    font-size : 1.15rem;
+    margin-bottom : .3rem;
+    font-family: 'Shippori Mincho B1', serif;
+}
+.inputBox input , .inputBox textarea , .inputBox select{
+    display: block;
+    width : 100%;
+    border: 1px solid darkgrey;
+    border-radius : 10px;
+    outline : 0;
+    background-color : rgb(189, 189, 189);
+    padding : .2rem;
+}
+.inputBox textarea {
+    resize : none;
+}
+.inputBox input[type='submit']{
+    font-family: 'Shippori Mincho B1', serif;
+    max-width : 30%;
+    margin:  auto;
+}
+
+
+
+

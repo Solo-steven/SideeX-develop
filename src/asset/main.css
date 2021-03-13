@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.select-container{
+    width : 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(#8d4ea0, #0f3c9c);
+}
+
+.select-card{
+    width: 50vw;
+    height: 80vh;
+    padding : 2rem;
+    border-radius: 20px;
+    border : 1px solid gray ;
+    background-color: rgba(238, 237, 237, 0.438);
+    backdrop-filter:  blur(15px);
+    display: flex;
+    flex-direction: column;
+}
+
+.select-header{
+    padding-bottom: 0.7rem;
+    border-bottom : 1px solid gray;
+    margin-bottom: 1.3rem;
+}
+.select-title{
+    font-size : 3.5rem;
+    color : white;
+    text-align : center;
+    font-family: 'Shippori Mincho B1', serif;
+}
+
+.select-body{
+    display: flex;
+    flex-direction : column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.select-body a{
+    display : block;
+    width : 100%;
+    display: flex;
+    align-items: center ; 
+    justify-content : center;
+    outline: none;
+   text-decoration: none;
+}
+
+.select-button{
+    margin-top : 1rem;
+    width: 40%;
+    display: inline-block;
+    color : rgb(65, 65, 65);
+    background-color : rgba(255, 255, 255, 0.7);
+    padding : 1rem;
+    font-size : 1.2rem;
+    border :  1px solid gray;
+    border-radius : 15px;
+    outline : none;
+    font-family: 'Shippori Mincho B1', serif;
+}
+.select-button:hover{
+    background-color : rgba(0, 0, 0, 0.7);
+    color : white;
+}
