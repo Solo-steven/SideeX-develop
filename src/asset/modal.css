@@ -69,11 +69,15 @@
     resize : none;
 }
 .inputBox input[type='submit']{
+    cursor : pointer;
     font-family: 'Shippori Mincho B1', serif;
     max-width : 30%;
     margin:  auto;
 }
-
+.inputBox input[type='submit']:active{
+    background-color : #000;
+    color : #fff;
+}
 
 
 

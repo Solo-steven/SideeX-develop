@@ -45,10 +45,9 @@ export default class PullFile extends React.Component{
         })
     }
     handleDirPath(e){
-        let new_dirPath , new_filePath ,dir_list , file_list;
+        let  dir_list , file_list;
         this.state.current_DirPath_List.forEach(dir =>{
             if(dir.path === e.target.value){
-                 new_dirPath = e.target.value;
                  dir_list = this.props[this.props.userState].listDirOfBranch(this.state.current_Repo , this.state.current_Branch, e.target.value);
                  file_list = this.props[this.props.userState].listFileOfDir(this.state.current_Repo ,this.state.current_Branch, e.target.value);
                  this.setState({
@@ -61,7 +60,6 @@ export default class PullFile extends React.Component{
         })
         this.state.current_FilePath_List.forEach(file=>{
             if(file.path === e.target.value){
-                new_filePath = e.target.value;
                 this.setState({
                     current_DirPath_List : [],
                     current_FilePath : e.target.value,
@@ -90,28 +88,28 @@ export default class PullFile extends React.Component{
                     <form className='modal-body' onSubmit={(e)=>{this.handleSubmitForm(e)}}>
                       <div className='inputBox'>
                          <label>Repo</label>
-                         <select value={this.state.current_Repo} onChange={(e)=>{this.handleRepo(e)}}>
+                         <select value={this.state.current_Repo} onChange={(e)=>{this.handleRepo(e)}} required>
                               <option value='empty'></option>  
                               {this.state.current_Repo_List.map( (repo,index)=>{return <option value={repo.name} key={index}>{repo.name}</option>})}
                          </select>
                       </div>
                       <div className='inputBox'>
                          <label>Branch</label>
-                         <select value={this.state.current_Branch} onChange={(e)=>{this.handleBranch(e)}}>
+                         <select value={this.state.current_Branch} onChange={(e)=>{this.handleBranch(e)}} required>
                             <option value='empty'></option>  
                             {this.state.current_Branch_List.map( (branch ,index)=>{return <option value={branch.name} key={index}>{branch.name}</option>})}
                          </select>
                       </div>
                       <div className='inputBox'>
                          <label>Path</label>
-                         <select value={ !this.state.current_FilePath ? this.state.current_DirPath : this.state.current_FilePath} onChange={(e)=>{this.handleDirPath(e)}}>
+                         <select value={ !this.state.current_FilePath ? this.state.current_DirPath : this.state.current_FilePath} onChange={(e)=>{this.handleDirPath(e)}} required>
                             <option value={ !this.state.current_FilePath ? this.state.current_DirPath : this.state.current_FilePath} >{ !this.state.current_FilePath ? this.state.current_DirPath : this.state.current_FilePath} </option>
                             { this.state.current_DirPath_List.map( (file,index)=>{return <option value={file.path} key={index}>{"Directory :" +file.path}</option>})}
                             { this.state.current_FilePath_List.map( (file,index)=>{return <option value={file.path} key={index}>{file.path}</option>})}
                          </select>
                       </div>
                       <div className='inputBox'>
-                         <input type='submit' value='push'/>
+                         <input type='submit' value='pull'/>
                       </div>
                     </form>
                 </div>

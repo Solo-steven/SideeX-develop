@@ -110,7 +110,7 @@ export async function requestPullFile(userToken, projectId, branchName ,filePath
     }).then((response)=>{
         file= response;
     }).catch((error)=>{
-        console.log(error);
+        console.log(error , "Pull info : " , userToken , projectId, branchName , `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`);
     })
     return file.data;
 }
