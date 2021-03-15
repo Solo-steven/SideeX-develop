@@ -8,11 +8,6 @@ import InputToken from './InputToken';
 import PushFile from './PushFile';
 import PullFile from './PullFile';
 
-/**
- *    github : bdda46d89c2596eed6419ab00b814e239968ff61 , 
- *     gitlab : eYo7pMLSfoC52X7UCxSu
- */
-
 export default class  MainSelect extends React.Component{
     constructor(props){
         super(props);
