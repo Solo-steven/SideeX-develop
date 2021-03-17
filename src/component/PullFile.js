@@ -76,6 +76,16 @@ export default class PullFile extends React.Component{
                 this.state.current_DirPath,
                 this.state.current_FilePath
             );
+        this.setState({
+            current_Repo : '',
+            current_Repo_List :[],
+            current_Branch : '',
+            current_Branch_List : [],
+            current_DirPath : '',
+            current_DirPath_List:[],
+            current_FilePath : '',
+            current_FilePath_List : []
+        });  
     }
     render(){
         return (

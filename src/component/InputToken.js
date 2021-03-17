@@ -4,6 +4,7 @@ import './../asset/modal.css';
 const InputToken = (props)=>{
     let [userName , setUserName]= useState('');
     let [userToken , setUserToken] = useState('');
+    let [url , setUrl] = useState('')
 
     return (
         <div className='modal' onClick={props.history.goBack}>
@@ -15,10 +16,19 @@ const InputToken = (props)=>{
                     <form className='modal-body' 
                           onSubmit={e=>{  
                              e.preventDefault() ; 
-                             props.changeUserNameAndToken(props.userState , userName , userToken)
+                             props.changeUserNameAndToken(props.userState , userName , userToken , url)
                              setUserName('');
                              setUserToken('');
-                          }}> 
+                             setUrl('');
+                          }}>
+                        {
+                            !(props.userState === "gitLabUser") ? 
+                             null : 
+                            <div className='inputBox'>
+                                <label>Personal Server's Domain </label>
+                                <input type='text' placeholder="If you want to push to your personal gitlab server , input your server's domain "  onChange={(e)=>{setUrl(e.target.value)}} />
+                            </div> 
+                        }   
                         <div className='inputBox'>
                             <label>User Name</label>
                             <input  type='text' placeholde='user name' value={userName} onChange={(e)=>{setUserName(e.target.value)}} required/>
