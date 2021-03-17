@@ -109,6 +109,15 @@ export default class PushFile extends React.Component {
             this.state.current_Commit_Message ,
             fileName , 
             fileContent)
+        this.setState({
+            current_Repo : '',
+            current_Repo_List : [],
+            current_Branch : '',
+            current_Branch_List :[],
+            current_Path : '',
+            current_Path_List :[],
+            current_Commit_Message : '',
+        })    
     }
 
     render(){

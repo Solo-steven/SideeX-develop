@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+/*
 async function requestUserId(userName, userToken){
     let name ;
     await axios({
@@ -16,13 +17,13 @@ async function requestUserId(userName, userToken){
     }).catch((error)=>{
         console.log(error);
     })
-}
+}*/
 
-export async function requestGitLabRepoOfUser(userName , userToken){
+export async function requestGitLabRepoOfUser(url, userName , userToken){
     let project ;
     await axios({
         method : 'get',
-        url : `https://gitlab.com/api/v4/users/${userName}/projects`,
+        url : `https://${url}/api/v4/users/${userName}/projects`,
         headers: {
             'PRIVATE-TOKEN' :  `${userToken}`
         }
@@ -35,11 +36,11 @@ export async function requestGitLabRepoOfUser(userName , userToken){
     return project.data; 
 }
 
-export async function requestGitLabBranchOfRepo(userName , userToken , projectId){
+export async function requestGitLabBranchOfRepo(url, userName , userToken , projectId){
     let branch ;
     await axios({
         method : 'get',
-        url : `https://gitlab.com/api/v4/projects/${projectId}/repository/branches`,
+        url : `https://${url}/api/v4/projects/${projectId}/repository/branches`,
         headers :{
             'PRIVATE-TOKEN' : userToken
         }
@@ -53,11 +54,11 @@ export async function requestGitLabBranchOfRepo(userName , userToken , projectId
 
 }
 
-export async function requestGitLabBrancContent(userName , userToken , projectId , branchName){
+export async function requestGitLabBrancContent(url, userName , userToken , projectId , branchName){
     let content ; 
     await axios({
         method : 'get',
-        url : `https://gitlab.com/api/v4/projects/${projectId}/repository/tree`,
+        url : `https://${url}/api/v4/projects/${projectId}/repository/tree`,
         headers:{
             'PRIVATE-TOKEN' : userToken
         },
@@ -76,10 +77,10 @@ export async function requestGitLabBrancContent(userName , userToken , projectId
     return content.data;
 }
 
-export async function requestPushFile(userToken, projectId , branchName, filePath  ,commitMessage ,fileContent , isExist){
+export async function requestPushFile(url, userToken, projectId , branchName, filePath  ,commitMessage ,fileContent , isExist){
     await axios({
         method : (isExist ? 'put' : 'post'),
-        url : `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}`,
+        url : `https://${url}/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}`,
         headers :{
             'PRIVATE-TOKEN' : userToken
         },
@@ -96,11 +97,11 @@ export async function requestPushFile(userToken, projectId , branchName, filePat
     })
 }
 
-export async function requestPullFile(userToken, projectId, branchName ,filePath){
+export async function requestPullFile(url, userToken, projectId, branchName ,filePath){
     let file ;
     await axios({
         method : 'get',
-        url : `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`,
+        url : `https://${url}/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`,
         headers:{
             'PRIVATE-TOKEN' : userToken
         },
@@ -113,4 +114,25 @@ export async function requestPullFile(userToken, projectId, branchName ,filePath
         console.log(error , "Pull info : " , userToken , projectId, branchName , `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`);
     })
     return file.data;
+}
+
+export async function requestNewBranch(url ,userToken, repoId, newBranchName , branchRef ){
+    let data;
+    await axios({
+        method : 'post',
+        url : `https://${url}/api/v4/${repoId}/repository/branches`,
+        headers:{
+            'PRIVATE-TOKEN' : userToken
+        },
+        params:{
+            branch : newBranchName, 
+            ref : branchRef
+        }
+    }).then((response)=>{
+        data = response;
+        console.log('Success new a branch');
+    }).catch((error)=>{
+        console.log(error);
+    })
+    return data;
 }

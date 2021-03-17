@@ -1,4 +1,7 @@
-import {requestGitLabRepoOfUser ,requestGitLabBranchOfRepo ,requestGitLabBrancContent , requestPushFile , requestPullFile} from './fetch'
+import {requestGitLabRepoOfUser , requestGitLabBranchOfRepo ,requestGitLabBrancContent , 
+        requestPushFile         , requestPullFile           ,
+        requestNewBranch
+       } from './fetch'
 import {Treetify }from './treetify';
 
 class GitLabFile{
@@ -39,8 +42,8 @@ class GitLabBranch{
          }
          return null;
     }
-    async getBranchInfo(userName , userToken, repoId){
-        let data = await requestGitLabBrancContent(userName, userToken , repoId , this.name);
+    async getBranchInfo(url, userName , userToken, repoId){
+        let data = await requestGitLabBrancContent(url, userName, userToken , repoId , this.name);
         for(let file of data){
             this.child.push(new GitLabFile(file.path, file.id , file.type))
         }
@@ -61,19 +64,20 @@ class GitlabRepo{
         }
         return null;
     }
-    async getRepoInfo(userName , userToken){
-        let data =await requestGitLabBranchOfRepo(userName, userToken , this.id);
+    async getRepoInfo(url, userName , userToken){
+        let data =await requestGitLabBranchOfRepo(url, userName, userToken , this.id);
         for(let branch of data){
             this.branch.push(new GitLabBranch(branch.name));
         }
         for(let branch of this.branch){
-            await branch.getBranchInfo(userName, userToken , this.id);
+            await branch.getBranchInfo(url, userName, userToken , this.id);
         }
     }
 }
 
 export default class GitlabUser{
-    constructor(name , token){
+    constructor(name , token, url){
+        this.url = ( !url ? "gitlab.com" : url );
         this.name = name ;
         this.token = token;
         this.repo=[]
@@ -141,19 +145,19 @@ export default class GitlabUser{
 
     }
     async getUserInfo(){
-        let data = await requestGitLabRepoOfUser(this.name , this.token);
+        let data = await requestGitLabRepoOfUser(this.url,  this.name , this.token);
         for(let repo of data){
             this.repo.push(new GitlabRepo(repo.name,repo.id));
         }
         for(let repo of this.repo){
-            await repo.getRepoInfo(this.name ,this.token);
+            await repo.getRepoInfo(this.url, this.name ,this.token);
         }
     }
     async pushFile(repoName , branchName, dirPath  ,commitMessage , fileName, fileContent){
         let repoId = this.searchRepo(repoName).id;
         let path = ( !dirPath ? '': dirPath+'/')+fileName; 
         let file = this.searchFile(repoName , branchName, dirPath ,path);
-        await requestPushFile(this.token , repoId , branchName, path ,commitMessage, fileContent , (!file ? false : true))
+        await requestPushFile(this.url, this.token , repoId , branchName, path ,commitMessage, fileContent , (!file ? false : true))
         if(!file){
             let dir = this.searchDir(repoName , branchName, dirPath);
             dir.child.push(new GitLabFile(path, '', 'file'));
@@ -161,8 +165,16 @@ export default class GitlabUser{
     }
     async pullFile(repoName , branchName , dirPath ,filePath){
         let repoId = this.searchRepo(repoName).id;
-        let data = await requestPullFile(this.token, repoId, branchName, filePath);
+        let data = await requestPullFile(this.url, this.token, repoId, branchName, filePath);
         console.log(data);       
+    }
+    async createBranch(repoName , newBranchName , branchRef){
+        let repoId = this.searchRepo(repoName).id;
+        let data = await requestNewBranch(this.url, this.token, repoId, newBranchName, branchRef);
+        console.log(data);
+        branchRef = this.searchBranch(repoName , branchRef);
+        newBranchName = JSON.parse(JSON.stringify(branchRef));
+        this.searchRepo(repoName).branch.push(newBranchName);
     }
 
 }
