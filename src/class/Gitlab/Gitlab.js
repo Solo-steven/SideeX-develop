@@ -169,12 +169,11 @@ export default class GitlabUser{
         console.log(data);       
     }
     async createBranch(repoName , newBranchName , branchRef){
-        let repoId = this.searchRepo(repoName).id;
-        let data = await requestNewBranch(this.url, this.token, repoId, newBranchName, branchRef);
-        console.log(data);
-        branchRef = this.searchBranch(repoName , branchRef);
-        newBranchName = JSON.parse(JSON.stringify(branchRef));
-        this.searchRepo(repoName).branch.push(newBranchName);
+        let targetRepo = this.searchRepo(repoName);
+        await requestNewBranch(this.url, this.token, targetRepo.id, newBranchName, branchRef);
+        let newGitlabBranch = new GitLabBranch(newBranchName);
+        await newGitlabBranch.getBranchInfo(this.url, this.name, this.token, targetRepo.id);
+        targetRepo.branch.push(newGitlabBranch);
     }
 
 }

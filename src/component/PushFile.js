@@ -152,7 +152,7 @@ export default class PushFile extends React.Component {
                      </div>
                      <div className='inputBox'>
                         <label>Commit messgae</label>
-                        <textarea cols='10'rows='7' type='text' onChange={(e)=>{this.handleCommitMessage(e)}} required/>
+                        <textarea cols='10'rows='7' type='text' value={this.state.current_Commit_Message} onChange={(e)=>{this.handleCommitMessage(e)}} required/>
                      </div>
                      <div className='inputBox'>
                        <label>File</label>

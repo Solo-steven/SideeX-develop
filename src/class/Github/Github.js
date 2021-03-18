@@ -1,5 +1,6 @@
 import {requestGithubUserName, requestGithubRepoOfUser , requestGithubBranchOfRepo , 
-        requestGithubContent , requestGitTree,  requestPushFile , requestPullFile } from './fetch';
+        requestGithubContent , requestGitTree,  requestPushFile , requestPullFile  ,
+        requestNewBranch } from './fetch';
 import  {Treetify} from './treetify'        
 
 class GithubFile{
@@ -20,7 +21,6 @@ class GithubFile{
         return null;
     }
     async getGitTreeInfo(userName, userToken, repoName){
-        console.log(this.sha)
         let file_of_tree = await requestGitTree(userName ,userToken , repoName , this.sha);
         for(let file of file_of_tree){
             this.child.push(new GithubFile(`${this.path}/${file.path}`, file.sha, file.type));
@@ -30,8 +30,9 @@ class GithubFile{
 }
 
 class GithubBranch{
-     constructor( name){
+     constructor( name , sha){
          this.name= name;
+         this.sha = sha;
          this.path = '';
          this.type='dir';
          this.child=[];
@@ -75,7 +76,7 @@ class GithubRepo{
     async getRepoInfo(userName , userToken){
         let branch_info = await requestGithubBranchOfRepo(userName, userToken, this.name);
         for(let branch of branch_info){
-            this.branch.push(new GithubBranch(branch.name));
+            this.branch.push(new GithubBranch(branch.name , branch.commit.sha));
         }
         for(let branch of this.branch){
             await branch.getBranchInfo(userName, userToken, this.name);
@@ -167,7 +168,9 @@ export default class GithubUser{
         let file = this.searchFile(repoName, branchName, dirPath, path);
         let response =  await requestPushFile(this.token, this.name, repoName, branchName, path ,commitMessage ,fileContent, ( !file ?'':file.sha));
         let dir = this.searchDir(repoName, branchName , dirPath );
-        dir.child.push(new GithubFile(response.path ,response.sha, response.type));
+        dir.child.push(new GithubFile(response.content.path ,response.content.sha, response.content.type));
+        let branch = this.searchBranch(repoName , branchName);
+        branch.sha = response.commit.sha;
         console.log(response);
     }
     async pullFile(repoName , branchName , dirPath ,filePath){
@@ -176,5 +179,16 @@ export default class GithubUser{
             return;      
         let githubBlob = await requestPullFile(this.token, this.name , repoName , file.sha);
         console.log(githubBlob)
+    }
+    async createBranch(repoName , newBranchName ,branchName ){
+        let targetRepo = this.searchRepo(repoName);
+        let refBranch = this.searchBranch(repoName , branchName);
+        let data = await requestNewBranch(this.token , this.name , repoName , refBranch.sha, newBranchName);
+        console.log(data);
+        if(data){
+            let newBranch = new GithubBranch(newBranchName , refBranch.sha);
+            await newBranch.getBranchInfo(this.name , this.token , repoName);
+            targetRepo.branch.push(newBranch);
+        }
     }
 }

@@ -120,7 +120,7 @@ export async function requestNewBranch(url ,userToken, repoId, newBranchName , b
     let data;
     await axios({
         method : 'post',
-        url : `https://${url}/api/v4/${repoId}/repository/branches`,
+        url : `https://${url}/api/v4/projects/${repoId}/repository/branches`,
         headers:{
             'PRIVATE-TOKEN' : userToken
         },

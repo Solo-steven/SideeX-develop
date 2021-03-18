@@ -112,7 +112,7 @@ export async function requestPushFile(userToken, userName ,repoName, branchName 
                 sha : fileSha
             }
         }).then((response)=>{
-            data = response.data.content;
+            data = response.data;
             console.log(`push file to ${repoName} of ${branchName} in ${filePath} is success.`); 
         }).catch((error)=>{
             console.log(error);
@@ -134,4 +134,24 @@ export async function requestPullFile(userToken , userName , repoName ,fileSha){
         console.log(error);
     })
     return data;
+}
+
+export async function requestNewBranch(userToken , userName ,repoName , branchRef , newBranchName){
+    let data ;
+    await axios({
+        method : 'post',
+        url : `https://api.github.com/repos/${userName}/${repoName}/git/refs`,
+        headers:{
+            Authorization : `token ${userToken}`
+        },
+        data : {
+            ref : `refs/heads/${newBranchName}`,
+            sha : branchRef,
+        }
+    }).then((response)=>{
+        data = response;
+    }).catch((error)=>{
+        console.log(error);
+    })
+    return data ;
 }

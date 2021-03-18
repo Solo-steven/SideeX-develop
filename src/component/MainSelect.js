@@ -1,16 +1,17 @@
 import React from 'react';
 import './../asset/main.css';
-import {BrowserRouter , Route ,Switch , Link, NavLink} from 'react-router-dom';
+import {BrowserRouter , Route ,Switch , Link} from 'react-router-dom';
 
 import GitHubUser from './../class/Github/Github'
 import GitLabUser from './../class/Gitlab/Gitlab'
 import InputToken from './InputToken';
 import PushFile from './PushFile';
 import PullFile from './PullFile';
+import CreateBranch from './CreateBranch'
 
 /**
- *   github 
- *    gitlab : 
+ *   github  : 93466d677708819b5917882c52e67b1306ffa3e6
+ *    gitlab : KgaU9aDz9zzP8XnH_gVi
  *    self-gitlab : 3jn4xPiY1YJcwZ7d5Sfq
  */
 
@@ -78,6 +79,9 @@ export default class  MainSelect extends React.Component{
                                             <Link to={`${props.match.url}/pullFile`}>
                                                 <button className='select-button'>Pull File</button>
                                             </Link>
+                                            <Link to={`${props.match.url}/createBranch`}>
+                                                <button className='select-button'>Create Branch</button>
+                                            </Link>
                                             <button className='select-button' onClick={()=>{props.history.goBack()}}>Back</button>
                                             <Switch> 
                                                     <Route exact path={`${props.match.path}/changeToken`}
@@ -101,6 +105,16 @@ export default class  MainSelect extends React.Component{
                                                     <Route exact path={`${props.match.path}/pullFile`}
                                                         render = {(props)=>{
                                                             return <PullFile 
+                                                                    {...props}
+                                                                        userState = { props.match.params.userState} 
+                                                                        gitHubUser = {this.state.gitHubUser}
+                                                                        gitLabUser = {this.state.gitLabUser}   
+                                                                    />
+                                                        }}
+                                                    />
+                                                    <Route exact path={`${props.match.path}/createBranch`}
+                                                        render = {(props)=>{
+                                                            return <CreateBranch
                                                                     {...props}
                                                                         userState = { props.match.params.userState} 
                                                                         gitHubUser = {this.state.gitHubUser}
