@@ -9,11 +9,6 @@ import PushFile from './PushFile';
 import PullFile from './PullFile';
 import CreateBranch from './CreateBranch';
 
-/**
- *    github  : 93466d677708819b5917882c52e67b1306ffa3e6
- *    gitlab  : KgaU9aDz9zzP8XnH_gVi
- *    self-gitlab : 3jn4xPiY1YJcwZ7d5Sfq
- */
 
 export default class  MainSelect extends React.Component{
     constructor(props){

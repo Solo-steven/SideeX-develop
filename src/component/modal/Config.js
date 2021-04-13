@@ -4,8 +4,6 @@ import {connect} from 'react-redux';
 import * as APIActionGenerator from '../../state/actions/APIactions'
 import "./../../asset/UI/form.css"
 
-// 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
-// KgaU9aDz9zzP8XnH_gVi
 class Config extends React.Component {
     constructor(props){
         super(props);
