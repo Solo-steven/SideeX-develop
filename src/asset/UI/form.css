@@ -1,0 +1,55 @@
+.inputBlock{
+    width:100%;
+    padding: 0rem 1rem .4rem 1rem;
+}
+.inputBlock + .inputBlock{
+    margin-top : .3rem;
+}
+.inputBlock label{
+    display : block;
+    font-size : 1.15rem;
+    letter-spacing : 1px;
+    margin-bottom : .1rem
+}
+.inputBlock input[type="text"], .inputBlock input[type="submit"], .inputBlock select{
+    width:100%;
+    font-size : 1rem;
+    padding : .3rem;
+    border-radius:  10px;
+    outline:none;
+    border:  1px solid gray;
+}
+
+.inputBlock textarea{
+    width:100%;
+    font-size:1rem;
+    margin-top: .2rem;
+    padding : .3rem;
+    border-radius : 5px;
+    outline: none;
+    border: .8px solid gray;
+    resize: none;
+    outline : none;
+}
+
+.inputBlock input:hover, .inputBlock select:hover, .inputBlock textarea:hover{
+    background-color :rgb(241, 241, 241);
+}
+.inputBlock input:focus, .inputBlock select:focus, .inputBlock textarea:focus{
+    background-color :rgb(241, 241, 241);
+    box-shadow : 0 0 10px rgb(146, 146, 146)
+}
+.inputBlock input[type="submit"]{
+    margin-top : .7rem;
+    width:40%;
+    margin-left: 30%;
+}
+.inputBlock input[type="submit"]:hover{
+    color :rgb(241, 241, 241);
+    background:rgb(39, 39, 39)
+}
+.inputBlock input[type="submit"]:active{
+    color :rgb(241, 241, 241);
+    background:rgb(39, 39, 39);
+    box-shadow : 0 0 10px #000;
+}

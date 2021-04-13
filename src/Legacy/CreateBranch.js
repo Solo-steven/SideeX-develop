@@ -1,5 +1,5 @@
 import React from 'react';
-import './../asset/modal.css'
+import './asset/modal.css'
 
 export default class CreateBranch extends React.Component{
     constructor(props){

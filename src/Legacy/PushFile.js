@@ -1,5 +1,5 @@
 import React from 'react';
-import './../asset/modal.css';
+import './asset/modal.css';
 
 
 async function parserInputFile(type ,file){
@@ -102,6 +102,12 @@ export default class PushFile extends React.Component {
         let file = this.fileRef.current.files[0];
         let fileName = file.name;
         let fileContent = await parserInputFile(this.props.userState , file);
+        console.log(            this.state.current_Repo   , 
+            this.state.current_Branch ,
+            this.state.current_Path , 
+            this.state.current_Commit_Message ,
+            fileName , 
+            fileContent)
         await this.props[this.props.userState].pushFile(
             this.state.current_Repo   , 
             this.state.current_Branch ,

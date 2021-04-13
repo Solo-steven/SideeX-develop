@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MainSelect from './component/MainSelect';
+import {Provider } from 'react-redux';
+import App from './component/App';
+import store from './state/store';
+//import MainSelect from "./Legacy/MainSelect.js"
 
-class App extends React.Component{
-    render(){
-        return(
-            <MainSelect/>
-        )
-    }
-}
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>    
+, document.getElementById('root'));

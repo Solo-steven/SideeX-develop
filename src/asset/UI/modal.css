@@ -1,0 +1,69 @@
+.modal{
+    position: absolute; 
+    z-index: 1;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(32, 32, 32, 0.884);
+    display :flex; 
+    justify-content: center;
+    align-items : center;
+}
+
+.modal-dialog{
+    display : flex;
+    flex-direction : column;
+    height: 90vh;
+    width: 90%;
+    max-width : 500px;
+    border-radius : 5px ; 
+    border: 1px solid rgb(104, 104, 104);
+    background-color: rgba(255, 255, 255, 0.999);
+}
+
+.modal-heading{
+    display : flex;
+    justify-content:space-between;
+    padding : .5rem 1rem;
+    border-bottom: 1.2px solid rgb(221, 221, 221);
+    margin-bottom : 1.4rem;
+    background-color :rgb(241, 241, 241);
+}
+.modal-option{
+    display : flex;
+}
+.modal-option .icon{
+    cursor : pointer;
+    text-decoration : none;
+    color : #000;
+}
+.icon +  .icon{
+    margin-left : .4rem
+}
+.modal-title{
+    cursor : pointer;
+    text-align : center;
+    font-size : 1.5rem;
+    letter-spacing :1.2px;
+}
+.modal-body{
+    flex-grow: 1;
+}
+.modal-body-header{
+    display : flex;
+    position : relative;
+    justify-content : center;
+    padding : .3rem 1rem .1rem 1rem;
+}
+.modal-body-header img{
+    display : inline-block;
+    height : 60px;
+    margin : -8px;
+}
+
+
+.modal-body-title{
+    font-size : 1.8rem;
+    letter-spacing : .1rem;
+    margin-right: .5rem;
+}

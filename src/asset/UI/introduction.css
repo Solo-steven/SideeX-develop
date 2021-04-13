@@ -1,0 +1,42 @@
+.introduction{
+    width: 100%;
+    padding: 0rem 1rem .4rem 1rem;
+}
+.time-block{
+    position: relative;
+    width: 100%; 
+    padding : .7rem 1.4rem 1rem 1.4rem ;
+}
+
+.time-block::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background: #000;
+    height: 35px;
+    width: 35px;
+}
+.time-block::before{
+    content:" ";
+    width : 1px;
+    height: 100%;
+    position: absolute;
+    background: #000;
+    top: 0;
+    left: 17.5px;
+}
+.time-block .heading{
+    font-size :1.5rem;
+    font-weight :600;
+    margin-left: 17.5px;
+}
+.time-block .body{
+    padding :.7rem 1.5rem;
+    margin-left: 17.5px;
+}
+.time-block .body ul{
+    margin-left :1.5rem;
+}
+

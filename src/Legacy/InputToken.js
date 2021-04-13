@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import './../asset/modal.css';
+import './asset/modal.css';
 
 const InputToken = (props)=>{
     let [userName , setUserName]= useState('');

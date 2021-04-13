@@ -1,0 +1,108 @@
+.message{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background :rgba(19, 19, 19, 0.98);
+}
+
+.message-dialog{
+    display : flex;
+    flex-direction :column;
+    max-width: 400px;
+    height: 60vh;
+    width: 90%;
+    border-radius: 20px;
+    background-color : #fff;
+    animation : fade .5s ;
+}
+@keyframes fade{
+    0%{
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+.message-header{
+    padding : .4rem 1rem;
+    border-bottom : 1px solid gray;
+    margin-bottom: .5rem;
+}
+
+.message-title{
+    font-size : 2.4rem;
+    letter-spacing : .1rem;
+    font-weight : bold;
+    text-align : start;
+    margin-left: 10%;
+}
+
+.message-body{
+    flex-grow: 1;
+    display : flex;
+    flex-direction : column;
+}
+.message-body-heading{
+    padding : .4rem .8rem;
+    font-weight: 400;
+    font-size :1.3rem;
+}
+.message-body ul{
+    margin: auto;
+    margin-top:  .6rem;
+}
+.message-body li{
+    margin-bottom: .2rem
+}
+
+.message-body .icon{
+    align-self: center;
+    margin :auto;
+}
+.icon img{
+    width : 100%;
+    margin : -5px;
+}
+.icon p{
+    font-size :1.6rem;
+    margin-top: .3rem;
+    letter-spacing:3px;
+    text-align :center;
+}
+
+.message-footer{
+    display : flex;
+    justify-content:flex-end;
+    padding : .6rem 1.2rem ;
+    border-top : 1px solid gray;
+    margin-top: .5rem;
+}
+
+.message-footer button{
+    display :  inline-block;
+    cursor : pointer;
+    outline : none;
+    border-radius :10px;
+    border : none;
+    padding :.5rem .7rem;
+    font-size : 1.2rem;
+    background-color : white;
+    color : rgb(238, 64, 64);
+    box-shadow : 0 0 3px rgb(238, 64, 64)
+}
+
+.message-footer button:hover{
+    color : white;
+    background-color :  rgb(238, 64, 64); 
+}
+.message-footer button:active{
+    box-shadow : 0 0 5px rgb(238, 64, 64) ,
+    0 0 10px rgb(238, 64, 64)  
+}
