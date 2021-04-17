@@ -1,22 +1,17 @@
-import {githubUserData, githubAPIreducer} from "./githubAPI";
-import {gitlabUserData, gitlabAPIreducer} from "./gitlabAPI"
-import {UIState, UIStatereducer} from "./UIState";
+import {UIState, UIStatereducer} from "./UIReducer";
+import {APIReducer} from "./APIReducer"
 
 export const initialState = {
-     githubUserData ,
-     gitlabUserData,
+     githubUserData : [],
+     gitlabUserData: [],
      UIState
 }
 
 export const reducer =(state, action)=>{ 
     if(!state) 
         return initialState;  
-    if(action.payload){
-        if(action.payload.remote==="github"){
-            return githubAPIreducer(state, action); 
-        }else if(action.payload.remote ==="gitlab"){
-            return gitlabAPIreducer(state, action);
-        }  
+    if(action.payload && action.payload.remote){
+        return APIReducer(state, action)
     }    
     return UIStatereducer(state, action); 
 }

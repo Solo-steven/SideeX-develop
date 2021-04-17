@@ -5,7 +5,6 @@ import App from './component/App';
 import store from './state/store';
 //import MainSelect from "./Legacy/MainSelect.js"
 
-
 ReactDOM.render(
     <Provider store={store}>
         <App/>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 function DFS_Treetify(rootNode, data){
     for(let dir of rootNode.child){
         if(dir.type === 'tree'){
@@ -80,8 +81,7 @@ async function getBranchContent(url, userToken , projectId , branchName){
     })
     return content.data;
 }
-export async function getUserData(userName, userToken){
-    let url ="gitlab.com" ;
+export async function getUserData(url, userName, userToken){
     let repolist , branchlist, branchContent, userData =[];
     repolist = await getRepoList(url, userName,userToken);
     for(let repo of repolist){
@@ -127,6 +127,7 @@ export async function pullFile(url, userToken, projectId, branchName ,filePath){
 
 
 export async function pushFile(url, userToken, projectId , branchName, filePath  ,commitMessage ,fileContent , isExist){
+    let data ;
     await axios({
         method : (isExist ? 'put' : 'post'),
         url : `https://${url}/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}`,
@@ -140,14 +141,21 @@ export async function pushFile(url, userToken, projectId , branchName, filePath 
         }
     }).then((response)=>{
         console.log('Success push file to gilab');
-        console.log(response);
+        let name = response.data.file_path.split("/");
+        name = name[name.length-1]
+        data = {
+            name : name ,
+            path : response.data.file_path ,
+            sha: null 
+        }
     }).catch((error)=>{
         throw error;
     })
+    return data;
 }
 
-/*
-export async function getNewBranch(url ,userToken, repoId, newBranchName , branchRef ){
+
+export async function createBranch(url ,userToken, repoId, newBranchName , branchRef ){
     let data;
     await axios({
         method : 'post',
@@ -166,4 +174,4 @@ export async function getNewBranch(url ,userToken, repoId, newBranchName , branc
         console.log(error);
     })
     return data;
-}*/
+}

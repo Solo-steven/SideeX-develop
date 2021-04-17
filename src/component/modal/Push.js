@@ -1,34 +1,10 @@
-import React from 'react';
+import React  from 'react';
 import {connect} from 'react-redux';
 
 import './../../asset/UI/form.css';
 
 import * as APIActionGenerator from '../../state/actions/APIactions';
 import * as UIActionGenerator from '../../state/actions/UIactions';
-
-async function parserInputFile(type ,file){
-    return new Promise((resolve , reject)=>{
-        let reader = new FileReader();
-        reader.onload = ()=>{
-            resolve(reader.result);
-        }
-        reader.onerror = ()=>{
-            reject(reader.error);
-        } 
-        if(type === 'github')
-            reader.readAsDataURL(file);
-        else if(type === 'gitlab')    
-            reader.readAsText(file)
-    }).then((result)=>{
-        if(type === 'github'){
-            return result.split(',')[1];
-        }
-        return result;
-    }).catch((error)=>{
-        console.log(error);
-        throw error;
-    })
-}
 
 
 class Push extends React.Component {
@@ -69,10 +45,14 @@ class Push extends React.Component {
         }catch(error){
             return error;
         }    
+        console.log(fileContent);
         this.props.push_File( 
             filePath,
             this.state.current_commit, 
-            fileContent )
+            fileContent,
+            this.props.match.params.remote
+        )
+        this.setState()   
     }
     render(){
         return (
@@ -142,3 +122,29 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Push);
+
+
+async function parserInputFile(type ,file){
+    return new Promise((resolve , reject)=>{
+        let reader = new FileReader();
+        reader.onload = ()=>{
+            resolve(reader.result);
+        }
+        reader.onerror = ()=>{
+            reject(reader.error);
+        } 
+        if(type === 'github')
+            reader.readAsDataURL(file);
+        else if(type === 'gitlab')    
+            reader.readAsText(file)
+    }).then((result)=>{
+        console.log("Fiule okl")
+        if(type === 'github'){
+            return result.split(',')[1];
+        }
+        return result;
+    }).catch((error)=>{
+        console.log(error);
+        throw error;
+    })
+}

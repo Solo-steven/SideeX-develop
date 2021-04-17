@@ -7,6 +7,10 @@ import gitlab from "./../../asset/pic/gitlab.png";
 
 import {close_Error_Message} from "./../../state/actions/Erroractions";
 
+/*
+const Error = ()=>{ }
+const Connect = ()=>{}
+*/
 const Message = ()=> { 
     const apiState = useSelector(state => state.UIState.apiState);
     const dispatch = useDispatch();
@@ -40,7 +44,7 @@ const Message = ()=> {
         icon =<Icon.Github size={16*15} style={{width:"100%"}} /> 
     }
     else if (apiState.remote==="GitLab"){
-        icon = <img src={gitlab}/>
+        icon = <img src={gitlab} alt="gitlab logo"/>
     }
     return (
         <div className="message">

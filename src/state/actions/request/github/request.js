@@ -189,10 +189,11 @@ export async function pushFile(userName, userToken ,repoName, branchName , fileP
             sha : fileSha
         }
     }).then((response)=>{
-        if(response.data.error){
-            throw new Error("graphql is fail");
+        data = {
+            name : response.data.content.name,
+            path : response.data.content.path,
+            oid : response.data.content.sha 
         }
-        data = response.data;
         console.log(`Success push file to github.(repo:${repoName},branch:${branchName}),path:${filePath}`); 
     }).catch((error)=>{
         console.log(error);

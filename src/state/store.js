@@ -1,9 +1,10 @@
 import {createStore , applyMiddleware} from "redux";
 
 import  {  initialState ,reducer} from "./reducer/reducer";
-import  { request_Middleware } from "./middleware/middleware"
+import  { request_Middleware } from "./middleware/middleware";
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const store = createStore(reducer, initialState ,applyMiddleware(request_Middleware) );
+const store = createStore(reducer, initialState ,composeWithDevTools(applyMiddleware(request_Middleware)) );
 
 store.subscribe(()=>{
     console.log("STORE CHANGE :", store.getState());

@@ -7,10 +7,11 @@ import "./../../asset/UI/modal.css";
 import gitlab from "./../../asset/pic/gitlab.png"
 import * as UIActionGenerator from "./../../state/actions/UIactions"
 import Message from './Message';
-import Introduction from './Introduction'
-import Config from './Config'
+import Introduction from './Introduction';
+import Config from './Config';
 import Pull from './Pull';
-import Push from './Push'
+import Push from './Push';
+import Branch from './Branch';
 
 const Modal = (props)=>{
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const Modal = (props)=>{
                                 <h2 className="modal-body-title">
                                     { props.match.params.remote === "github" ? "Github" : "GitLab"}
                                 </h2>
-                                { props.match.params.remote === "github" ? <Icon.Github size={16*2.4}/>: <img src={gitlab}/>}
+                                { props.match.params.remote === "github" ? <Icon.Github size={16*2.4}/>: <img src={gitlab} alt="gitlab logo"/>}
                             </div>
                             <Switch>
                                 <Route path={`${props.match.path}/inputToken}`} render={()=>{console.log("test"); return <p>Test</p>}} />
@@ -50,6 +51,7 @@ const Modal = (props)=>{
                                 <Route path={`${props.match.path}/inputToken`} component={Config}/> 
                                 <Route path={`${props.match.path}/pullFile`} component={Pull} />
                                 <Route path={`${props.match.path}/pushFile`} component={Push} />
+                                <Route path={`${props.match.path}/newBranch`} component={Branch} />
                             </Switch>
                         </div>
                 </div>

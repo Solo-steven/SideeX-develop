@@ -1,61 +1,56 @@
-import React from 'react'
-import {connect} from 'react-redux';
+import {useState} from 'react'
+import {useDispatch} from 'react-redux';
 
 import * as APIActionGenerator from '../../state/actions/APIactions'
 import "./../../asset/UI/form.css"
 
-class Config extends React.Component {
-    constructor(props){
-        super(props);
-        this.state ={
-            userName : "", 
-            userToken : ""
-        }
-        this.handle_Submit      = this.handle_Submit.bind(this);
-        this.handle_User_Name   = this.handle_User_Name.bind(this);
-        this.handle_User_Token  = this.handle_User_Token.bind(this);
+// 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
+// KgaU9aDz9zzP8XnH_gVi
+const Config = (props)=>{
+    const  dispatch = useDispatch();
+    const  [userName, setUserName ] = useState("");
+    const  [userToken , setUserToken] = useState("");
+    const  [url , setUrl] = useState("");
 
-    }
-    handle_User_Name(e){
-        this.setState({userName : e.target.value})
-    }
-    handle_User_Token(e){
-        this.setState({userToken : e.target.value})
-    }
-    handle_Submit(e){
+    const handleSubmit = (e)=>{
         e.preventDefault();
-        let remote = this.props.match.params.remote;
+        let remote = props.match.params.remote;
         if(remote === "github"){
-            sessionStorage.setItem("github_user_name", this.state.userName);
-            sessionStorage.setItem("github_user_token", this.state.userToken);
+            sessionStorage.setItem("github_user_name", userName);
+            sessionStorage.setItem("github_user_token", userToken);
         }else if(remote === "gitlab"){
-            sessionStorage.setItem("gitlab_user_name", this.state.userName);
-            sessionStorage.setItem("gitlab_user_token", this.state.userToken);
+            sessionStorage.setItem("gitlab_url", url)
+            sessionStorage.setItem("gitlab_user_name", userName);
+            sessionStorage.setItem("gitlab_user_token", userToken);
         }
-        this.setState({userName : "", userToken :""});
-        this.props.change_User_Config(remote)
+        setUserName("")
+        setUserToken("")
+        setUrl("")
+        dispatch(APIActionGenerator.change_User_Config(props.match.params.remote))
     }
-   render() {
-        return (
-            <form className="form" onSubmit={(e)=>{this.handle_Submit(e)}}>
-                <div className="inputBlock">  
-                    <label>Name</label>
-                    <input placeholder="user name" type="text" value={this.state.userName} onChange={(e)=>{this.handle_User_Name(e)}}/>
-                </div>
-                <div className="inputBlock">  
-                    <label>Token</label>
-                    <input placeholder="user token" type="text" value={this.state.userToken} onChange={(e)=>{this.handle_User_Token(e)}}/>
-                </div>
-                <div className="inputBlock">
-                    <input type="submit" value="connect"/>
-                </div>
-            </form>
-        )
-    }  
+    return (
+        <form className="form" onSubmit={(e)=>{handleSubmit(e)}}>
+            {
+                props.match.params.remote === "gitlab" ? (
+                    <div className="inputBlock">
+                        <label>Personal Domain</label>
+                        <input placeholder="personal server" type="text" value={url} onChange={(e)=>{setUrl(e.target.value)}}/>
+                    </div>
+                ) : null
+            }
+            <div className="inputBlock">  
+                <label>Name</label>
+                <input placeholder="user name" type="text" value={userName} onChange={(e)=>{setUserName(e.target.value)}} required/>
+            </div>
+            <div className="inputBlock">  
+                <label>Token</label>
+                <input placeholder="user token" type="text" value={userToken} onChange={(e)=>{setUserToken(e.target.value)}} required/>
+            </div>
+            <div className="inputBlock">
+                <input type="submit" value="connect"/>
+            </div>
+        </form>
+    )
 }
 
-const mapDispatchToProps = {
-    change_User_Config : APIActionGenerator.change_User_Config
-}
-
-export default connect(null , mapDispatchToProps)(Config);
+export default Config;

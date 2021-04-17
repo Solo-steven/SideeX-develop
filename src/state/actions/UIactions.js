@@ -6,6 +6,12 @@ import * as ActionTypes from "./actionTypes"
  * 
  */
 
+export function change_Current_Remote(){
+    return{
+        type : ActionTypes.CHANGE_CURRENT_REMOTE,
+    }
+}
+
 export function reset_UI_Config(){
     return {
         type : ActionTypes.RESET_UI_COFIG

@@ -50,6 +50,23 @@ function listFileOfParentRoot(currentRoot){
 export function UIStatereducer(state, action){
     if(!action)
         return state;
+    if(action.type === ActionTypes.CHANGE_CURRENT_REMOTE){
+        let currentRemote = state.UIState.currentRemote === "github" ? state.githubUserData : state.gitlabUserData
+        return { 
+             ...state,
+            UIState:{
+            ...state.UIState,
+            currentRemote: state.UIState.currentRemote === "github" ? "gitlab" : "github",
+            currentRepo   : {name:"", path:""},
+            currentBranch : {name:"", path:""},
+            repoList : currentRemote.map(repo=>repo.name),
+            branchList   : [],
+            currentRoot   : {name:"", path:""},
+            rootList      : [],
+            }
+        }
+    }
+    
     if(action.type === ActionTypes.RESET_UI_COFIG ){
         let currentRemote = (state.UIState.currentRemote === "github" ? state.githubUserData : state.gitlabUserData);
         return { 
