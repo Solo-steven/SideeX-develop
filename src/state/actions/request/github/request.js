@@ -145,8 +145,7 @@ export async function getUserData(userName, userToken){
             branchCount = await getBranchCount(userName, userToken, repo.name);
             branchList  = await getBranchList(userName, userToken,repo.name, branchCount);
         for(let branch of branchList){
-            fileList = await getBranchContent(userName, userToken, repo.name, branch.name);
-            branch.child = fileList.map(file=>{return {...file, parent: branch}});
+            branch.child = await getBranchContent(userName, userToken, repo.name, branch.name);
             await getGitTree(userName, userToken, repo.name, branch);
         }   
         userData.push({
@@ -164,7 +163,7 @@ export async function  pullGitBlob(userName, userToken, repoName, branchName, fi
             if(response.data.error){
                 throw new Error("graphql is fail");
             }
-            console.log(`Success pull file to github.(repo:${repoName},branch:${branchName}),file:${fileConfig.name}`)
+            console.log(`Success pull file to github.(repo:${repoName},branch:${branchName}),file:${fileConfig.path}`)
             fileBlob = response.data.data.repository.object
         }) 
         .catch(error=>{

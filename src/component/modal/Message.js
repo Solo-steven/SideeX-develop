@@ -14,7 +14,6 @@ const Connect = ()=>{}
 const Message = ()=> { 
     const apiState = useSelector(state => state.UIState.apiState);
     const dispatch = useDispatch();
-    console.log(apiState)
     let icon;
     if (!apiState)
       return null;

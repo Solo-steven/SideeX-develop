@@ -3,11 +3,6 @@ import * as gitlabAPI from "./request/gitlab/request";
 import * as ActionTypes from "./actionTypes";
 import * as ErrorActionGenerator from "./Erroractions";
 
-/** 
- *   ===== 第一類：重設 Config 時可以發出的 Action =====
- *    1.  
- */
-
 function start_Fetch_Data(remote){
     return {
         type : ActionTypes.START_FETCH_DATA,
@@ -65,17 +60,17 @@ export function pull_File(remote){
     return  async (dispatch, getState, next)=>{
         next(start_Pull_File(remote));
         try{
-            let fileBlob , currentRepo = getState().UIState.currentRepo, 
-                currentBranch = getState().UIState.currentBranch, 
-                currentRoot   = getState().UIState.currentRoot
+            let fileBlob , currentRepoInfo = getState().UIState.currentRepoInfo, 
+                currentBranchName = getState().UIState.currentBranchName, 
+                currentRootInfo   = getState().UIState.currentRootInfo
             if(remote === "github"){
                 let userName = sessionStorage.getItem("github_user_name");
                 let userToken = sessionStorage.getItem("github_user_token");
-                fileBlob  = await githubAPI.pullGitBlob(userName, userToken, currentRepo.name, currentBranch.name, currentRoot);
+                fileBlob  = await githubAPI.pullGitBlob(userName, userToken, currentRepoInfo.name, currentBranchName, currentRootInfo);
             }else if(remote === "gitlab"){
                 let url = sessionStorage.getItem("gitlab_url");
                 let userToken = sessionStorage.getItem("gitlab_user_token");
-                fileBlob = await gitlabAPI.pullFile("gitlab.com", userToken, currentRepo.id, currentBranch.name, currentRoot.path)
+                fileBlob = await gitlabAPI.pullFile("gitlab.com", userToken, currentRepoInfo.id, currentBranchName, currentRootInfo)
             }
             console.log(fileBlob);
             dispatch(finsh_Pull_File(remote));
@@ -104,28 +99,30 @@ export  function push_File(filePath, commitMessage, fileContent, remote) {
     return  async (dispatch, getState, next)=>{
         next(start_Push_File(remote));
         try{
-            let currentRepo =  getState().UIState.currentRepo , currentBranch = getState().UIState.currentBranch ,
-                currentRoot =  !getState().UIState.currentRoot.child ? currentBranch : getState().UIState.currentRoot;
+            let currentRepoInfo =  getState().UIState.currentRepoInfo , 
+                currentBranchName = getState().UIState.currentBranchName ,
+                rootList   = getState().UIState.rootList;
             let newData, fileState;    
             if(remote==="github"){
                 let userName  = sessionStorage.getItem("github_user_name");
                 let userToken = sessionStorage.getItem("github_user_token");
-                for(let file of currentRoot.child){
+                for(let file of rootList){
                     if(file.path === filePath)
                         fileState = file.oid;
                 }
-                newData = await githubAPI.pushFile(userName, userToken, currentRepo.name, currentBranch.name, filePath, commitMessage, fileContent, fileState);
+                newData = await githubAPI.pushFile(userName, userToken, currentRepoInfo.name, currentBranchName, filePath, commitMessage, fileContent, fileState);
             }else if(remote ==="gitlab"){
                 let url = sessionStorage.getItem("gitlab_url");
                 let userToken = sessionStorage.getItem("gitlab_user_token");
-                for(let file of currentRoot.child){
+                for(let file of rootList){
                     if(file.path === filePath)
                         fileState = true;
                 }
-                newData = await gitlabAPI.pushFile("gitlab.com" , userToken ,currentRepo.id, currentBranch.name, filePath,commitMessage,fileContent,fileState);
+                newData = await gitlabAPI.pushFile("gitlab.com" , userToken ,currentRepoInfo.id, currentBranchName, filePath,commitMessage,fileContent,fileState);
             }
+            console.log(newData, fileState)  
             if(fileState)
-               newData = false
+               newData = false 
             dispatch(finsh_Push_File(remote, newData));
         }catch(error){
             console.log(error);
@@ -142,28 +139,27 @@ function start_Create_Branch(remote){
     }
 }
 
-function finsh_Create_Branch(newBranch,remote){
+function finsh_Create_Branch(newBranchName,remote){
     return {
         type : ActionTypes.FINISH_CREATE_BRANCH,
-        payload:{remote, newBranch}
+        payload:{remote, newBranchName}
     }
 }
 
-export function create_Branch(newBranch, remote){
+export function create_Branch(newBranchName, remote){
     return async (dispatch , getState, next)=>{
         next(start_Create_Branch(remote))
         try{
-            let currentRepo =  getState().UIState.currentRepo , currentBranch = getState().UIState.currentBranch ;
+            let currentRepoInfo =  getState().UIState.currentRepoInfo , currentBranchName = getState().UIState.currentBranchName ;
             if(remote === "github"){
                 let userName  = sessionStorage.getItem("github_user_name");
                 let userToken = sessionStorage.getItem("github_user_token");
             }else if (remote==="gitlab"){
                 let url = sessionStorage.getItem("gitlab_url");
                 let userToken = sessionStorage.getItem("gitlab_user_token");
-                console.log(url, userToken, currentRepo.id, newBranch, currentBranch.name)
-                await gitlabAPI.createBranch("gitlab.com", userToken, currentRepo.id, newBranch, currentBranch.name)   
+                await gitlabAPI.createBranch("gitlab.com", userToken, currentRepoInfo.id, newBranchName, currentBranchName)   
             }    
-            dispatch(finsh_Create_Branch(newBranch, remote))
+            dispatch(finsh_Create_Branch(newBranchName, remote))
         }catch(error){
             console.error(error);
             dispatch(ErrorActionGenerator.error_When_Use_APICall());

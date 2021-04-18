@@ -38,7 +38,7 @@ class Push extends React.Component {
         e.preventDefault();
         let UIState = this.props.UIState;
         let file     = this.fileRef.current.files[0];
-        let filePath = !UIState.currentRoot.path ? file.name: UIState.currentRoot.path+"/"+file.name ; 
+        let filePath = !UIState.currentRootInfo.path ? file.name : UIState.currentRootInfo.path+"/"+file.name ; 
         let fileContent ;
         try{
             fileContent = await parserInputFile(this.props.match.params.remote, file);
@@ -59,7 +59,7 @@ class Push extends React.Component {
             <form onSubmit={(e)=>{this.handleSubmit(e)}}>
                 <div className="inputBlock">
                     <label>Repo:</label>
-                    <select value={this.props.UIState.currentRepo.name} onChange={(e)=>{ this.handleRepo(e)}} required>
+                    <select value={this.props.UIState.currentRepoInfo.name} onChange={(e)=>{ this.handleRepo(e)}} required>
                         <option value=""/>
                         {this.props.UIState.repoList.map((repo, index)=> 
                             <option value={repo} key={index}>{repo}</option> 
@@ -68,7 +68,7 @@ class Push extends React.Component {
                 </div>
                 <div className="inputBlock">
                     <label >Branch:</label>
-                    <select value={this.props.UIState.currentBranch.name} onChange={(e)=>{this.handleBranch(e)}} required>
+                    <select value={this.props.UIState.currentBranchName} onChange={(e)=>{this.handleBranch(e)}} required>
                           <option value=""></option>
                           {
                               this.props.UIState.branchList.map( (branch,index)=>
@@ -79,10 +79,10 @@ class Push extends React.Component {
                 </div>
                 <div className="inputBlock">
                     <label >Directory:</label>
-                    <select value={this.props.UIState.currentRoot.path} onChange={(e)=>{this.handleRoot(e)}} >
-                          <option value="current root">{this.props.UIState.currentRoot.path}</option> 
+                    <select value={this.props.UIState.currentRootInfo.path} onChange={(e)=>{this.handleRoot(e)}} >
+                          <option value="current root">{this.props.UIState.currentRootInfo.path}</option> 
                           {
-                              !this.props.UIState.currentRoot.path ? 
+                              !this.props.UIState.currentRootInfo.path ? 
                                 null : <option value="">back to pervious root</option>
                           }
                           {

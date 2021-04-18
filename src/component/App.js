@@ -11,11 +11,11 @@ import gitlab from "./../asset/pic/gitlab.png"
 
 const App = ()=>{
     const dispatch = useDispatch();
-    const currentRemote = useSelector(state => state.UIState.currentRemote);
+    const currentRemoteName = useSelector(state => state.UIState.currentRemoteName);
     const switch_Remote = (targetRemote)=>{
-          if(!currentRemote)  
+          if(!currentRemoteName)  
             return ;
-          if(targetRemote !== currentRemote)
+          if(targetRemote !== currentRemoteName)
              dispatch(UIActionGenerator.change_Current_Remote()) 
     }
     return (
@@ -48,7 +48,6 @@ const App = ()=>{
                <Route 
                    path= "/modal/:remote?"
                    render = {(props)=>{
-                       console.log(props);
                        return <Modal 
                                  match = { {params : props.match.params, url : props.match.url, path : props.match.path}}  
                                  push   = {props.history.push}

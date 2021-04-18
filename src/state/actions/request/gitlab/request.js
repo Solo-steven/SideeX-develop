@@ -10,7 +10,7 @@ function DFS_Treetify(rootNode, data){
             }
         }
     }
-    rootNode.child.push({...data, parent: rootNode});
+    rootNode.child.push(data);
 }
 
 async function Treetify(rootNode){
@@ -105,11 +105,11 @@ export async function getUserData(url, userName, userToken){
     return userData;
 }
 
-export async function pullFile(url, userToken, projectId, branchName ,filePath){
+export async function pullFile(url, userToken, projectId, branchName ,fileConfig){
     let file ;
     await axios({
         method : 'get',
-        url : `https://${url}/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`,
+        url : `https://${url}/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(fileConfig.path)}/raw`,
         headers:{
             'PRIVATE-TOKEN' : userToken
         },
@@ -119,7 +119,7 @@ export async function pullFile(url, userToken, projectId, branchName ,filePath){
     }).then((response)=>{
         file= response;
     }).catch((error)=>{
-        console.log(error , "Pull info : " , userToken , projectId, branchName , `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(filePath)}/raw`);
+        console.log(error , "Pull info : " , userToken , projectId, branchName , `https://gitlab.com/api/v4/projects/${projectId}/repository/files/${encodeURIComponent(fileConfig.path)}/raw`);
         throw error;
     })
     return file.data;

@@ -1,158 +1,90 @@
 import * as ActionTypes from "../actions/actionTypes"
 
 export const UIState ={
-    currentRemote: "",
+    currentRemoteName: "",
     apiState : "",
-    currentRepo   : {name:"", path:""},
+    currentRepoInfo   : {name:"", id:""},
     repoList      : [],
-    currentBranch : {name:"", path:""},
+    currentBranchName : "",
     branchList   : [],
-    currentRoot   : {name:"", path:""},
+    currentRootInfo   : {path:"", oid:"", type:""},
     rootList      : [],
-}
-
-function listBranchOfRepo(repoName, githubUserData){
-    for (let repo of githubUserData){
-        if(repo.name === repoName){
-            return repo.branch.map(branch => branch.name) 
-        }
-    }
-    return [];
-}
-
-function listFileOfBranch(branchName, currentRepo){
-    for (let branch of currentRepo.branch){
-        if(branch.name === branchName){
-            return branch.child.map(file => { return { path:file.path, type : file.type} })
-        }
-    }
-    return [];
-}
-
-function listFileOfNewRoot(newRootPath, currentRoot){
-    for(let newRoot of currentRoot.child){
-        if(newRoot.path === newRootPath){
-            if(newRoot.type === "blob")
-                return [];
-            return newRoot.child.map(file => { return { path:file.path, type : file.type} })
-        }
-    }
-    return [];
-}
-
-function listFileOfParentRoot(currentRoot){
-    if(!currentRoot.parent ){
-        return currentRoot.child.map(file => { return { path:file.path, type : file.type} });
-    }
-    return currentRoot.parent.child.map(file => { return { path:file.path, type : file.type} });
 }
 
 export function UIStatereducer(state, action){
     if(!action)
         return state;
     if(action.type === ActionTypes.CHANGE_CURRENT_REMOTE){
-        let currentRemote = state.UIState.currentRemote === "github" ? state.githubUserData : state.gitlabUserData
+        let newCurrentRemote = state.UIState.currentRemoteName === "github" ? state.githubUserData : state.gitlabUserData
         return { 
              ...state,
             UIState:{
             ...state.UIState,
-            currentRemote: state.UIState.currentRemote === "github" ? "gitlab" : "github",
-            currentRepo   : {name:"", path:""},
-            currentBranch : {name:"", path:""},
-            repoList : currentRemote.map(repo=>repo.name),
+            currentRemoteName: state.UIState.currentRemote === "github" ? "gitlab" : "github",
+            currentRepoInfo   : {name:"", id:""},
+            currentBranchName : "",
+            repoList : newCurrentRemote.map(repo=>repo.name),
             branchList   : [],
-            currentRoot   : {name:"", path:""},
+            currentRootInfo   : {path:"", oid:"", type:""},
             rootList      : [],
             }
         }
     }
     
     if(action.type === ActionTypes.RESET_UI_COFIG ){
-        let currentRemote = (state.UIState.currentRemote === "github" ? state.githubUserData : state.gitlabUserData);
+        let currentRemote = (state.UIState.currentRemoteName === "github" ? state.githubUserData : state.gitlabUserData);
         return { 
             ...state,
             UIState:{
                 ...state.UIState,
-                currentRepo   : {name:"", path:""},
-                currentBranch : {name:"", path:""},
+                currentRepoInfo   : {name:"", id:""},
+                currentBranchName : "",
                 repoList : currentRemote.map(repo=>repo.name),
                 branchList   : [],
-                currentRoot   : {name:"", path:""},
+                currentRootInfo   : {path:"", oid:"", type:""},
                 rootList      : [],
             }
         }
     }
     if(action.type === ActionTypes.CHANGE_CURRENT_REPO){
-        console.log(ActionTypes.CHANGE_CURRENT_REPO);
-        if(!action.payload.repoName){
-            return { 
-                ...state,
-                UIState:{
-                    ...state.UIState,
-                    currentRepo   : {name:"", path:""},
-                    currentBranch : {name:"", path:""},
-                    branchList   : [],
-                    currentRoot   : {name:"", path:""},
-                    rootList      : [],
-                }
-            }
-        }
-        let currentRemote = state.UIState.currentRemote === "github" ? state.githubUserData : state.gitlabUserData;
+        let currentRemote  = (state.UIState.currentRemoteName === "github" ? state.githubUserData : state.gitlabUserData)
+        let newRepo = search_Repo(action.payload.newRepoName, currentRemote);
         return {
             ...state,
             UIState :{ 
                 ...state.UIState,
-                currentRepo   : currentRemote.filter(repo=> repo.name === action.payload.repoName)[0],
-                currentBranch : {name:"", path:""},
-                branchList   : listBranchOfRepo(action.payload.repoName, currentRemote),
-                currentRoot   : {name:"", path:""},
+                currentRepoInfo   : {name:newRepo.name, id:newRepo.id} ,
+                currentBranchName : "",
+                branchList        : newRepo.branch.map(branch=> branch.name),
+                currentRootInfo   : {path:"", oid:"", type:""} ,
                 rootList      : [],
             }
         }
     }
     if(action.type === ActionTypes.CHANGE_CURRENT_BRANCH){
-        if(!action.payload.branchName){
-            return{ 
-                ...state,
-                UIState:{
-                    ...state.UIState,
-                    currentBranch : {name:"", path:""},
-                    currentRoot   : {name:"", path:""},
-                    rootList      : [],
-                }
-            }
-        }
+        let currentRemote  = (state.UIState.currentRemoteName === "github" ? state.githubUserData : state.gitlabUserData)
+        let newBranch = search_Branch(action.payload.newBranchName, state.UIState.currentRepoInfo.name, currentRemote)
         return {
             ...state ,
             UIState:{
                 ...state.UIState ,
-                currentBranch : state.UIState.currentRepo.branch.filter(branch => branch.name === action.payload.branchName)[0], 
-                currentRoot   : {name:"", path:""},
-                rootList      : listFileOfBranch(action.payload.branchName, state.UIState.currentRepo),
+                currentBranchName : newBranch.name, 
+                currentRootInfo   : {path:"", oid:"", type:""},
+                rootList      : newBranch.child.map(file=>{return {path:file.path, type:file.type, oid:file.oid}}),
             }
         }
     }
     if(action.type === ActionTypes.CHANGE_CURRENT_ROOT){
-        let  currentRoot = state.UIState.currentRoot ;   
-        if(!state.UIState.currentRoot.name)
-            currentRoot = state.UIState.currentBranch;   
-        if(!action.payload.newRootPath){
-            return{
-                ...state,
-                UIState:{
-                    ...state.UIState ,
-                    currentRoot   : !currentRoot.parent ? currentRoot : currentRoot.parent,
-                    rootList      : listFileOfParentRoot(currentRoot)
-                }    
-            }
-        }
-
+        let currentRemote  = (state.UIState.currentRemoteName === "github" ? state.githubUserData : state.gitlabUserData)
+        let newRoot =  !action.payload.newRootPath ? 
+            search_Root_Parent( state.UIState.currentRootInfo.path, state.UIState.currentBranchName, state.UIState.currentRepoInfo.name, currentRemote ) : 
+            search_Root( action.payload.newRootPath, state.UIState.currentBranchName, state.UIState.currentRepoInfo.name,currentRemote )  ;
         return {
             ...state,
             UIState:{
                 ...state.UIState ,
-                currentRoot   : currentRoot.child.filter(file=>file.path === action.payload.newRootPath)[0],
-                rootList      : listFileOfNewRoot(action.payload.newRootPath, currentRoot),
+                currentRootInfo   : { path:newRoot.path, oid:newRoot.oid ,type:newRoot.type},
+                rootList      :  !newRoot.child ? []: newRoot.child.map(file=>{return {path:file.path, type:file.type, oid:file.oid}}),
             }
         }
     }
@@ -175,4 +107,53 @@ export function UIStatereducer(state, action){
         }
     }
     return state;
+}
+
+
+function search_Repo(repoName, userData){
+    for(let repo of userData){
+        if(repo.name === repoName)
+            return repo;
+    }
+    return null
+}
+
+function search_Branch(branchName,  repoName, userData){
+    let repo = search_Repo(repoName, userData);
+    for(let branch of repo.branch){
+        if(branch.name === branchName){
+            return branch ;
+        }
+    }
+    return null;
+}
+
+function search_Root(rootPath, branchName, repoName, userData){
+    let branch = search_Branch(branchName, repoName, userData);
+    let state = branch
+    while(state.path!==rootPath){  
+        for(let child of state.child){
+            if(rootPath.indexOf(child.path)===0){
+                state = child ;
+                break;
+            }
+        }
+    }
+    return state ;
+}
+
+function search_Root_Parent(rootPath, branchName, repoName, userData){
+    let branch = search_Branch(branchName, repoName, userData);
+    let parent =null ;
+    let state = branch
+    while(state.path!==rootPath){
+        for(let child of state.child){
+            if(rootPath.indexOf(child.path)===0){
+                parent = state ;
+                state = child ;
+                break;
+            }
+        }
+    }
+    return parent ;
 }

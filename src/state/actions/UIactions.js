@@ -18,17 +18,17 @@ export function reset_UI_Config(){
     }
 }
 
-export function change_Current_Repo(repoName){
+export function change_Current_Repo(newRepoName){
     return { 
         type :ActionTypes.CHANGE_CURRENT_REPO,
-        payload : {repoName}
+        payload : {newRepoName}
     }
 }
 
-export function change_Current_Branch(branchName){
+export function change_Current_Branch(newBranchName){
     return { 
         type: ActionTypes.CHANGE_CURRENT_BRANCH,
-        payload : {branchName}
+        payload : {newBranchName}
     }
 }
 
