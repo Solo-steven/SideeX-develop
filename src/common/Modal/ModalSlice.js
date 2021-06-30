@@ -1,7 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
 import * as Search from "./searchFunction";
 
-import {finish_Fetch_Data, finish_change_UserInfo} from "./../../features/Connect/ConnectAction"
+import {finish_Fetch_Data} from "./../../features/Connect/ConnectAction";
+import {finish_Pull_File} from "./../../features/Pull/PullAction";
+import {finish_Push_File} from "./../../features/Push/PushAction";
 
 const initialState = {
     currentRemoteName :  "" ,
@@ -85,7 +87,6 @@ const ModalSlice = createSlice({
             else     
                 newRoot = Search.search_Root(action.payload.newRootPath, state.currentBranch.name, state.currentRepo.name , currentRemote);
             state.currentRoot = newRoot ;
-            console.log("test", newRoot);
             state.rootList = !newRoot.child ? []: newRoot.child.map(file=>{return {
                 type : file.type,
                 path : file.path,
@@ -95,7 +96,9 @@ const ModalSlice = createSlice({
     },
     extraReducers: (builder)=>{
         builder.addCase(finish_Fetch_Data,(state,action)=>{
-            let currentRemote = JSON.parse(localStorage.getItem(`${state.currentRemoteName}_user_data`));
+            let currentRemote = action.payload.newData;
+            console.log(`Finish fetch data from ${state.currentRemoteName} . userData :`,currentRemote);   
+            localStorage.setItem(`${state.currentRemoteName}_user_data`, JSON.stringify(currentRemote));
             state.repoList = currentRemote.map(repo=>repo.name);
             state.currentRepo = initialState.currentRepo;
             state.currentBranch = initialState.currentBranch;
@@ -103,13 +106,23 @@ const ModalSlice = createSlice({
             state.currentRoot = initialState.currentRoot;
             state.rootList = initialState.rootList;
         })
-        builder.addCase(finish_change_UserInfo, (state, action) => {
-            state.allRepoList  = action.payload.newAllRepoList;
+        builder.addCase(finish_Pull_File, (state,action)=>{
             state.currentRepo = initialState.currentRepo;
             state.currentBranch = initialState.currentBranch;
             state.branchList = initialState.branchList;
             state.currentRoot = initialState.currentRoot;
             state.rootList = initialState.rootList;
+        })
+        builder.addCase(finish_Push_File, (state, action)=>{
+            let newData = action.payload.newData;
+            let currentRemote= JSON.parse(localStorage.getItem(`${state.currentRemoteName}_user_data`)) 
+            Search.add_File_To_Repo(newData, state.currentRoot.path, state.currentBranch.name, state.currentRepo.name, currentRemote)
+            state.currentRepo = initialState.currentRepo;
+            state.currentBranch = initialState.currentBranch;
+            state.branchList = initialState.branchList;
+            state.currentRoot = initialState.currentRoot;
+            state.rootList = initialState.rootList;
+            localStorage.setItem(`${state.currentRemoteName}_user_data`, JSON.stringify(currentRemote));
         })
     }
 })

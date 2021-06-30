@@ -3,7 +3,11 @@ import * as githubAPI from "./../../request/github/request";
 import * as gitlabAPI from "./../../request/gitlab/request"
  
 export const start_Fetch_Data = createAction("Start_Fetch_Data");
-export const finish_Fetch_Data = createAction("Finsh_Fetch_Data");
+export const finish_Fetch_Data = createAction("Finsh_Fetch_Data", function prepare(newData){
+                                          return{payload:{
+                                              newData
+                                          }}  
+                                });
 
 export const fetch_Data =(remote)=> async (dispatch)=>{
     dispatch(start_Fetch_Data(remote));
@@ -23,7 +27,7 @@ export const fetch_Data =(remote)=> async (dispatch)=>{
         console.log(`Finish fetch data from ${remote} . userData :`,userData);   
         localStorage.setItem(`${remote}_user_data`, JSON.stringify(userData));
         console.log(localStorage.getItem(`${remote}_user_data`))
-        dispatch(finish_Fetch_Data());      
+        dispatch(finish_Fetch_Data(userData));      
     }catch(error){
         console.log(error);
         return
@@ -35,6 +39,7 @@ export const fetch_Data =(remote)=> async (dispatch)=>{
  *    Not Using 
  */
 
+/*
 export const start_change_UserInfo = createAction("Start_Change_UserInfo");
 export const finish_change_UserInfo = createAction(
                     "Finish_Change_UserInfo",
@@ -91,4 +96,4 @@ export const fetch_UserData=(remote, repoLits)=>async(dispatch)=>{
     }catch(error){
 
     }
-}
+}*/

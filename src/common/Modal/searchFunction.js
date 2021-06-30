@@ -49,3 +49,36 @@ export function search_Root_Parent(rootPath, branchName, repoName, userData){
     }
     return parent ;
 }
+
+export function add_File_To_Repo(file, dirPath, branchName ,repoName, remote){
+    let target; 
+    for(let repo of remote){
+        if(repo.name === repoName){
+            target = repo;
+            break;
+        }
+    }
+    for(let branch of target.branch){
+        if(branch.name === branchName){
+            target = branch;
+            break;
+        }
+    }
+    while(target.path!== dirPath){
+        for(let child of target.child){
+            if (dirPath.indexOf(child.path)===0){
+                target = child;
+            }
+        }
+    }
+    for(let existFile of target.child){
+        if(existFile.path === file.path)
+            return;
+    }
+    target.child.push({
+        type : "blob",
+        oid : file.oid,
+        name : file.name,
+        path : file.path
+    })   
+}

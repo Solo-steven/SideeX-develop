@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 function DFS_Treetify(rootNode, data){
     for(let dir of rootNode.child){
         if(dir.type === 'tree'){
@@ -146,7 +145,7 @@ export async function pushFile(url, userToken, projectId , branchName, filePath 
         data = {
             name : name ,
             path : response.data.file_path ,
-            sha: null 
+            oid: null 
         }
     }).catch((error)=>{
         throw error;

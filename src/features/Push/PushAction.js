@@ -4,15 +4,20 @@ import * as githubAPI from "./../../request/github/request";
 import * as gitlabAPI from "./../../request/gitlab/request";
 
 export const start_Push_File = createAction("Start_Push_File");
-export const finish_Push_File = createAction("Finish_Push_File");
+export const finish_Push_File = createAction("Finish_Push_File", function prepare(newData){
+                                    return{payload:{
+                                        newData
+                            }}});
+
 
 export const push_File = (remote, config) => async (dispatch)=>{
     dispatch(start_Push_File());
     try{
+        let newData ;
         if(remote === "github"){
             let userName = sessionStorage.getItem("github_user_name");
             let userToken = sessionStorage.getItem("github_user_token");
-            let newData = await githubAPI.pushFile(userName, userToken,
+            newData = await githubAPI.pushFile(userName, userToken,
                 config.currentRepo.name, 
                 config.currentBranch.name,
                 config.filePath ,
@@ -21,33 +26,19 @@ export const push_File = (remote, config) => async (dispatch)=>{
                 config.sha );
 
         }else if(remote === "gitlab"){
-            await gitlabAPI.pushFile()
+            let url = sessionStorage.getItem("gitlab_url");
+            let userToken = sessionStorage.getItem("gitlab_user_token");
+            newData = await gitlabAPI.pushFile("gitlab.com", userToken,
+                config.currentRepo.id, 
+                config.currentBranch.name,
+                config.filePath ,
+                config.commitMessage, 
+                config.fileContent ,
+                Boolean(config.sha) );
         }
-        dispatch(finish_Push_File())
+        dispatch(finish_Push_File(newData))
     }catch(error){
+        console.log(error);
+       // dispatch(error_When_API_Call("Push", error))
     }
-}
-
-
-function addFileInfoToRepo(repo, UIState, data){
-    let target;
-    for(let branch of repo.branch){
-        if(branch.name === UIState.currentBranchName)
-            target = branch;
-    }
-    while(target.path!==UIState.currentRootInfo.path){
-        for(let child of target.child){
-            if (UIState.currentRootInfo.path.indexOf(child.path)===0){
-                console.log("deeping", child.path)
-                target = child;
-            }
-        }
-    }
-    target.child.push({
-        type : "blob",
-        oid : data.oid,
-        name : data.name,
-        path : data.path
-    })   
-    return repo
 }

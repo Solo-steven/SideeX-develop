@@ -1,7 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 import {start_Fetch_Data , finish_Fetch_Data} from "./../../features/Connect/ConnectAction";
-import {start_Pull_File, finish_Pull_File} from "./../../features/Pull/PullAction"
+import {start_Pull_File, finish_Pull_File} from "./../../features/Pull/PullAction";
+import {start_Push_File, finish_Push_File} from "./../../features/Push/PushAction";
 
 const initialState = {
     apiState:{ 
@@ -43,6 +44,12 @@ const MessagesSlice = createSlice({
         })
         builder.addCase(finish_Pull_File,(state, action)=>{
             state.apiState.state = initialState.apiState.state
+        })
+        builder.addCase(start_Push_File,(state, action)=>{
+            state.apiState.state = "Pushing File";
+        })
+        builder.addCase(finish_Push_File,(state, action)=>{
+            state.apiState.state = "";
         })
     }
 })

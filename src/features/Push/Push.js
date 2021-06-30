@@ -44,7 +44,7 @@ class Push extends React.Component {
         }catch(error){
             return error;
         }  
-        for(let file in UIState.rootList){
+        for(let file of UIState.rootList){
             if(file.path === filePath){
                 sha = file.oid;
                 break ;
@@ -147,7 +147,6 @@ async function parserInputFile(type ,file){
         else if(type === 'gitlab')    
             reader.readAsText(file)
     }).then((result)=>{
-        console.log("Fiule okl")
         if(type === 'github'){
             return result.split(',')[1];
         }

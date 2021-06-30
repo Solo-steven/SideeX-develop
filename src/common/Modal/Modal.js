@@ -28,9 +28,6 @@ const Modal = (props)=>{
                                 <Link to={`${props.match.url}/pushFile`}  className="icon" onClick={()=>{dispatch(reset_UI())}}>
                                     <Icon.ArrowUpSquare size={16*2.4}/>
                                 </Link>  
-                                <Link to={`${props.match.url}/newBranch`}  className="icon" onClick={()=>{dispatch(reset_UI())}}>
-                                    <Icon.Bezier2 size={16*2.4}/>
-                                </Link>  
                             </div>
                             <div className="modal-title" onClick={()=>{props.push("/")}}>
                                 X
@@ -57,8 +54,3 @@ const Modal = (props)=>{
 }
 
 export default Modal;
-
-/**
-        <Route path={`${props.match.path}/pushFile`} component={Push} />
-        <Route path={`${props.match.path}/newBranch`} component={Branch} />
- */

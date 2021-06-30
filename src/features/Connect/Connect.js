@@ -1,7 +1,7 @@
 import React from "react"
 import {useState} from 'react'
 import {useDispatch} from 'react-redux';
-import {fetch_Data, change_UserInfo} from "./ConnectAction";
+import {fetch_Data} from "./ConnectAction";
 
 import "./../../asset/UI/form.css";
 import PopWindow from "./PopWindow"
